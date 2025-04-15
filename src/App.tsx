@@ -51,7 +51,7 @@ export function App() {
         <hr className="RampBreak--l" />
 
         <InputSelect<Employee>
-          isLoading={isLoading}
+          isLoading={employeeUtils.loading} //changed this so that it reflects the status of the employee and not the loading state
           defaultValue={EMPTY_EMPLOYEE}
           items={employees === null ? [] : [EMPTY_EMPLOYEE, ...employees]}
           label="Filter by employee"
@@ -65,7 +65,12 @@ export function App() {
               return
             }
 
-            await loadTransactionsByEmployee(newValue.id)
+            if (newValue.id === "") {
+              // This is so that if all employees is selected then load all transactions.
+              await loadAllTransactions()
+            } else {
+              await loadTransactionsByEmployee(newValue.id)
+            }
           }}
         />
 
